@@ -1,0 +1,358 @@
+﻿Terminal_Commands_Practice_problem
+
+#program 1-Get user info from /etc/passwd and change ownership of user’s home directory select user id higher than 1000
+#!/bin/bash 
+a=`cat /etc/passwd `
+b=`cat /etc/passwd |awk -F: '{print $1}'`
+echo "print the first field:" $b
+c=`cat /etc/passwd |awk -F: '{if($4>1000) print $1}'`
+echo "print all userid greater than 1000:" $c
+d=`cat /etc/passwd | awk -F: '{print $6}'`
+echo "print the second field to get home directory:" $d
+e=`cat /etc/passwd | awk -F: '{if($4>1000) print$6}'`
+echo $e
+
+
+#Program 2-Move files from one folder to the  respective folders. 
+#!/bin/bash -x
+for file in `ls *.txt`
+do
+        foldername=`echo $file | awk -F. '{print $1}'`;
+        if [ -d $foldername ]
+        then
+                        rm -r $foldername;
+        fi
+        mkdir $foldername;
+        cp $file $foldername
+        echo $file "Added successfully"
+done
+
+
+OUTPUT :
+abc.txt Added successfully
+def.txt Added successfully
+ghi.txt Added successfully
+jkl.txt Added successfully
+
+
+ls
+abc abc.txt def def.txt ghi ghi.txt jkl jkl.txt 
+
+
+#Program 3-Append current date to all log files name which has extension .log.1 from a folder
+#!/bin/bash -x
+for f in `ls *.log.1`
+do
+                d=`date +%d%m%Y`;
+                filename=`echo $f | awk -F. '{print $1 ".'$d'."$2}'`;
+                mv $f $filename;
+done
+
+
+OUTPUT : 
+ls
+abc.21062020.log 
+def.21062020.log  
+ghi.21062020.log 
+jkl.21062020.log
+mno.21062020.log 
+  
+
+#program 4- Archive the files from /var/log folder which have modified 7 days ago and move it to your backup folder.
+cd/TerminalCommand/linux-content
+find $file -mtime -7 | tail -4
+Move command
+mv `find $file -mtime -7 | tail -7` /home/sayali18/TerminalCommands/linux-content/backuplog
+ls backuplog/
+
+
+OUTPUT :
+./Differencebetweenfile.sh
+./responsecode.sh
+./diff.sh
+./clientIP.sh
+./original-backup
+./original-backup/original-backup.sh
+./linux-content
+
+
+
+# Program 5- Print last 4 frequently access urls count in sorted order form /var/log/httpd/access.log
+
+Cd/TerminalCommands/linux-content
+
+
+#!/bin/bash -x
+cat access.log | awk '{print $11}' | sort | uniq -c | sort -nr | head -4
+ 
+OUTPUT :
+ 1475 "https://fundoopush-dev.bridgelabz.com/login"
+   1141 "https://fundoopush-dev.bridgelabz.com/dashboard/article"
+    377 "-"
+    176 "https://fundoopush-dev.bridgelabz.com/add-post"
+  
+
+
+
+#Program 6-Print list of last 4 frequently access unique urls at sorted order at specific hours from /var/log/httpd/access.log
+Cd/TerminalCommands/linux-content
+#!bin/bash -x
+cat access.log | awk '{print $11}' | sort | uniq -c | sort -nr | head -4
+
+
+OUTPUT :
+ 1475 "https://fundoopush-dev.bridgelabz.com/login"
+   1141 "https://fundoopush-dev.bridgelabz.com/dashboard/article"
+    377 "-"
+    176 "https://fundoopush-dev.bridgelabz.com/add-post"
+  
+
+
+
+#Program 7-Print list of web response code count in the unique sorted order at specific hours
+Cd/TerminalCommands/linux-content
+
+
+#!/bin/bash -x
+cat access.log | awk '{print $9}' | sort | uniq -c | sort -nr | head -4
+
+
+OUTPUT :
+ 3176 200
+     26 304
+      8 206
+  
+
+
+#Program 8-print list of 10 unique sorted client IP from /var/log/httpd/access.log
+Cd/TerminalCommands/linux-content
+
+
+#!/bin/bash -x
+cat access.log | awk -F\" '{print $8}' | sort | uniq -c | sort -nr | head -10
+
+
+OUTPUT :
+ 3049 114.79.180.62
+     33 157.33.193.244
+     17 66.249.79.48
+     15 66.249.79.45
+     10 66.249.79.42
+     10 45.113.248.190
+      7 45.93.20.4
+      7 182.48.221.222
+      7 14.142.39.102
+      6 66.249.73.95
+  
+
+
+#Program 9-Check if a folder exist or not. if it's not present, create it.
+#!/bin/bash -x
+read folder
+        if [ -d $folder ]
+        then
+                echo "Folder Exist";
+        else
+                mkdir $folder;
+        fi
+OUTPUT :
+Folder Exist
+  
+
+#Program 10- Execute command “hello” and “ls” and check execution status and print whether command executed successful or not.
+#!/bin/bash -x
+echo "Will accept only hello or ls respectivly"
+read -p "Enter the command: " value
+if [[ $value == hello ]]
+then
+        $value
+        echo "Command Executed Succesfully "
+else
+        echo "Command is not Executed"
+fi
+read -p "Enter the command: " value1
+if [[ $value1 == ls ]]
+then
+   $value1
+   echo "Command Executed Succesfully "
+else
+   echo "Command is not Executed"
+fi
+OR
+Sudo apt install hello
+hello
+echo $?
+ls
+echo $?
+
+
+OUTPUT :
+Will accept only hello or ls respectivly
+Enter the command: hello
+Hello, world!
+Command Executed Succesfully 
+Enter the command: ls
+abc                  def.21062020.log    ghi.21062020.log        logfile.sh
+abc.21062020.log  def.txt              ghi.txt                mno.21062020.log
+abc.txt                  executionstatus.sh  jkl                movefile.sh
+checkfolder.sh          Executionstatus.sh  jkl.21062020.log
+def                  ghi                      jkl.txt
+Command Executed Succesfully 
+
+
+  
+#Program 11-Set environment userscret=dH34xJaa23 if its already not set
+#!/bin/bash -x
+if [[ -z "user" ]]
+then
+        echo "Env is empty string"
+else
+        export user="dH34xJaa23"
+        echo "Env value is set $user"
+fi
+
+
+OUTPUT :
+Env value is set dH34xJaa2
+  
+
+#Program 12-find a word “systemd” from all log files in the folder /var/log and print number of occurence more than 0 against each file.
+
+cd /var/log
+#program 12-Find a word systemd from all log files in the folder/var/log numbe$
+#!bin/bash -x
+read -p "enter the name you want to find:" name
+sum=0
+for file in `find . -type f -name '*.txt' | awk -F/ '{print $2}'`
+do
+        word=`cat $file | grep -o $name | wc -l`;
+        if [ $word -gt 0 ]
+        then
+                sum=$(($sum+$word))
+        fi
+done
+echo "Total number of occurrence is:"$sum
+
+
+OUTPUT :
+Enter the name:
+systemd
+Total number of occurrence is: 8
+
+
+  
+#program 13-create a process list table display PID PPID CMD %MEM %CPU
+Cd/TerminalCommands/linux-content
+
+
+#!/bin/bash -x
+ps axo pid,ppid,cmd,%mem,%cpu
+
+
+
+
+OUTPUT :
+PID   PPID            CMD                           %MEM      %CPU
+  1      0           /sbin/init auto noprompt      0.3               0.0
+  2      0            [kthreadd]                          0.0                0.0
+  3      2            [rcu_gp]                             0.0                 0.0
+  4      2             [rcu_par_gp]                     0.0                 0.0 
+  6      2              [kworker/0:0H-kb]            0.0                 0.0
+  8      2             [mm_percpu_wq]              0.0                 0.0 
+  9      2             [ksoftirqd/0]                       0.0                 0.0
+ 10     2            [rcu_sched]                        0.0                 0.0
+ 11     2            [migration/0]                      0.0                 0.0
+
+
+
+
+  
+
+
+
+#program 14-Data analysis/ manipulation (Awk)
+ cd/TerminalCommand/linux-content 
+ nano Datamanipulation.sh
+ chmod +x Datamanipulation.sh
+./Datamaipulation.sh
+
+
+1) Print EmpolyeeName and TotalPay who has BasePAy greater than 10000
+
+
+cat data.csv | awk '{{if ( $4 > 10000 )} print $2" "$7}'
+
+
+OUTPUT :
+EmployeeName TotalPay
+NATHANIEL 567595
+GARY 538909
+ALBERT 335279
+CHRISTOPHER 332343
+PATRICK 326373
+DAVID 316285
+ALSON 315981
+DAVID 307899
+JOANNE 302377
+PATRICIA 297608
+EDWARD 294580
+
+
+2) What is the aggregate Totalpay of employees whose jobtitle is ‘CAPTAIN’
+
+
+cat data.csv | grep -i captain |  awk '{sum+=$7} END{print sum}'
+
+
+OUTPUT :
+1171796
+
+
+3) Print JobTitle and Overtimepay who has Overtimepay is between 7000 and 10000
+
+
+cat data.csv | awk '{ {if ( $5 > 7000 && $5 < 10000 ) print $3" "$5}}'
+
+
+OUTPUT:
+DEPUTYCHIEF 9737
+ASSTDEPUTY 8601
+
+
+4) Print average Basepay
+
+
+cat data.csv | awk '{sum+=$4} END{print sum/NR}'
+
+
+OUTPUT :
+157972
+
+
+  
+
+
+
+#program 15- Find the difference between  Orignal file and the updated file.
+#!/bin/bash -x
+file1="original"
+file2="updated"
+if [ -d $file1 ]
+then
+        diff ~/TerminalCommands/linux-content/updated/updated.sh ~/TerminalCom$
+else
+        mkdir $file1 $file2;
+        nano original.sh updated.sh;
+        mkdir original-backup;
+        cp original.sh original-backup.sh;
+        mv original.sh $file1;
+        mv updated.sh $file2;
+        mv original-backup.sh original-backup;
+        diff ~/TerminalCommands/linux-content/updated/updated.sh ~/TerminalCom$
+fi
+
+
+OUTPUT :
+< sayali Badgujar
+---
+> sayali
